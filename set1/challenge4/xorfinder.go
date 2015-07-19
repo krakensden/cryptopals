@@ -15,13 +15,13 @@ type AnalysisResult struct {
 	Error    error
 }
 
-func main() {
+func DecodeFile(filename string) *AnalysisResult {
 	results := make(chan *AnalysisResult, 10)
 
-	f, err := os.Open("input.txt")
+	f, err := os.Open(filename)
 	if err != nil {
 		fmt.Println(err)
-		return
+		return nil
 	}
 	defer func() {
 		f.Close()
@@ -37,7 +37,7 @@ func main() {
 		}
 		if err != nil {
 			fmt.Println(err)
-			return
+			return nil
 		}
 		if len(buf) != 60 {
 			fmt.Println("Count", len(buf), string(buf))
@@ -61,6 +61,11 @@ func main() {
 			fmt.Println("Got an error", cur_result.Error, "from", *(cur_result.Original))
 		}
 	}
+	return best_result
+}
+
+func main() {
+	best_result := DecodeFile("input.txt")
 	if best_result != nil {
 		fmt.Println("The single-byte XOR encoded string is", *(best_result.Decoded), "from", *(best_result.Original), "with a score of", best_result.Score)
 	} else {
