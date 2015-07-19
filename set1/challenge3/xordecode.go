@@ -54,12 +54,11 @@ func UnPrintableScore(input []byte) int {
 	return count
 }
 
-func main() {
+func SingleBitBruteForce(input string) (string, error) {
 	src, err := hex2b64.Hex2Byte("1b37373331363f78151b7f2b783431333d78397828372d363c78373e783a393b3736")
 	char_map := make(map[byte]int)
 	if err != nil {
-		fmt.Println("Uh... the input is broken?")
-		return
+		return "", err
 	}
 	var most_likely byte
 	var most_likely_score int
@@ -72,6 +71,14 @@ func main() {
 			most_likely_score = char_map[i]
 		}
 	}
-	fmt.Println("Most likely key: ", string([]byte{most_likely}), " with a score of ", most_likely_score)
-	fmt.Println(string(bytexor.ByteXor(src, most_likely)))
+	return string(bytexor.ByteXor(src, most_likely)), err
+}
+
+func main() {
+	encoded, err := SingleBitBruteForce("1b37373331363f78151b7f2b783431333d78397828372d363c78373e783a393b3736")
+	if err != nil {
+		fmt.Println("Uh... the input is broken?")
+		return
+	}
+	fmt.Println(encoded)
 }
