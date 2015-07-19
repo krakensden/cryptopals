@@ -41,6 +41,7 @@ func main() {
 		}
 		if len(buf) != 60 {
 			fmt.Println("Count", len(buf), string(buf))
+			continue
 		}
 		go func(tstring string) {
 			decoded, score, err := xordecode.SingleBitBruteForce(tstring)
@@ -53,7 +54,7 @@ func main() {
 	var best_result, cur_result *AnalysisResult
 	for ; linecount > 0; linecount-- {
 		cur_result = <-results
-		if best_result == nil || (cur_result.Error == nil && cur_result.Score > best_result.Score) {
+		if best_result == nil || (cur_result.Error == nil && cur_result.Score >= best_result.Score) {
 			best_result = cur_result
 		}
 		if cur_result.Error != nil {

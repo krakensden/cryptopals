@@ -61,11 +61,11 @@ func SingleBitBruteForce(input string) (string, int, error) {
 	}
 	var most_likely byte
 	var most_likely_score int
-	// populate with the printable characters
+
 	for i := byte(0x0); i < 0xff; i++ {
 		translated := bytexor.ByteXor(src, i)
 		char_map[i] = EScore(translated)
-		if UnPrintableScore(translated) == 0 && char_map[i] > most_likely_score {
+		if char_map[i] > most_likely_score {
 			most_likely = i
 			most_likely_score = char_map[i]
 		}
