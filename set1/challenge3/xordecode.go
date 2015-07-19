@@ -1,0 +1,77 @@
+package main
+
+import (
+	"../challenge1/hex2b64"
+	"../challenge2/bytexor"
+	"fmt"
+)
+
+// Count the number of 'e' characters in a sequence of ascii bytes
+func EScore(input []byte) int {
+	var count int = 0
+	vowel_map := map[byte]bool{
+		'e': true,
+		't': true,
+		'a': true,
+		'o': true,
+		'i': true,
+		'n': true,
+		's': true,
+		'h': true,
+		'r': true,
+		'd': true,
+		'l': true,
+		'u': true,
+		'E': true,
+		'T': true,
+		'A': true,
+		'O': true,
+		'I': true,
+		'N': true,
+		'S': true,
+		'H': true,
+		'R': true,
+		'D': true,
+		'L': true,
+		'U': true,
+		' ': true,
+	}
+	for _, val := range input {
+		if vowel_map[val] {
+			count++
+		}
+	}
+	return count
+}
+
+func UnPrintableScore(input []byte) int {
+	var count int = 0
+	for _, val := range input {
+		if val < 0x20 || val > 0x7e {
+			count++
+		}
+	}
+	return count
+}
+
+func main() {
+	src, err := hex2b64.Hex2Byte("1b37373331363f78151b7f2b783431333d78397828372d363c78373e783a393b3736")
+	char_map := make(map[byte]int)
+	if err != nil {
+		fmt.Println("Uh... the input is broken?")
+		return
+	}
+	var most_likely byte
+	var most_likely_score int
+	// populate with the printable characters
+	for i := byte(0x0); i < 0xff; i++ {
+		translated := bytexor.ByteXor(src, i)
+		char_map[i] = EScore(translated)
+		if UnPrintableScore(translated) == 0 && char_map[i] > most_likely_score {
+			most_likely = i
+			most_likely_score = char_map[i]
+		}
+	}
+	fmt.Println("Most likely key: ", string([]byte{most_likely}), " with a score of ", most_likely_score)
+	fmt.Println(string(bytexor.ByteXor(src, most_likely)))
+}

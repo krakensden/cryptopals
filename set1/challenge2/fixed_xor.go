@@ -12,7 +12,7 @@ func main() {
 	b := "686974207468652062756c6c277320657965"
 	abyte, _ := hex2b64.Hex2Byte(a)
 	bbyte, _ := hex2b64.Hex2Byte(b)
-	final, _ := bytexor.ByteXor(abyte, bbyte)
+	final, _ := bytexor.SliceXor(abyte, bbyte)
 	desired, _ := hex2b64.Hex2Byte("746865206b696420646f6e277420706c6179")
 
 	if len(final) != len(desired) {

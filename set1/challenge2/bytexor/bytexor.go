@@ -2,7 +2,7 @@ package bytexor
 
 import "errors"
 
-func ByteXor(a, b []byte) ([]byte, error) {
+func SliceXor(a, b []byte) ([]byte, error) {
 	if len(a) != len(b) {
 		return []byte{}, errors.New("mismatched input lengths")
 	}
@@ -11,4 +11,12 @@ func ByteXor(a, b []byte) ([]byte, error) {
 		output[i] = aval ^ b[i]
 	}
 	return output, nil
+}
+
+func ByteXor(a []byte, b byte) []byte {
+	output := make([]byte, len(a), len(a))
+	for i, aval := range a {
+		output[i] = aval ^ b
+	}
+	return output
 }
