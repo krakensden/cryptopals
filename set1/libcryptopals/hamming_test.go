@@ -4,7 +4,7 @@ import (
 	"testing"
 )
 
-func TestHex2Base64(t *testing.T) {
+func TestHamming(t *testing.T) {
 	astr := []byte("this is a test")
 	bstr := []byte("wokka wokka!!!")
 	if hd, _ := HammingDistance(astr, bstr); hd != 37 {
