@@ -5,43 +5,52 @@ import (
 	"fmt"
 )
 
+var hex_char_map map[byte]byte = map[byte]byte{
+	'0': 0,
+	'1': 1,
+	'2': 2,
+	'3': 3,
+	'4': 4,
+	'5': 5,
+	'6': 6,
+	'7': 7,
+	'8': 8,
+	'9': 9,
+	'a': 10,
+	'b': 11,
+	'c': 12,
+	'd': 13,
+	'e': 14,
+	'f': 15,
+	// user friendly!
+	'A': 10,
+	'B': 11,
+	'C': 12,
+	'D': 13,
+	'E': 14,
+	'F': 15,
+}
+
+func Byte2Hex(input []byte) string {
+	// Each byte becomes a pair of runes
+	output := make([]byte, 0, len(input)*2)
+	for _, val := range input {
+		output = append(output, []byte(fmt.Sprintf("%x", val))...)
+	}
+	return string(output)
+}
+
 func Hex2Byte(input string) ([]byte, error) {
 	// Each pair of runes encodes one byte. If there's an odd number of runes, assume it's 0x4, not 0x40.
 
-	char_map := map[byte]byte{
-		'0': 0,
-		'1': 1,
-		'2': 2,
-		'3': 3,
-		'4': 4,
-		'5': 5,
-		'6': 6,
-		'7': 7,
-		'8': 8,
-		'9': 9,
-		'a': 10,
-		'b': 11,
-		'c': 12,
-		'd': 13,
-		'e': 14,
-		'f': 15,
-		// user friendly!
-		'A': 10,
-		'B': 11,
-		'C': 12,
-		'D': 13,
-		'E': 14,
-		'F': 15,
-	}
-
 	output := make([]byte, 0, len(input)/2+len(input)%2)
 	for i := 0; i < len(input); i += 2 {
-		byteval0, ok := char_map[input[i]]
+		byteval0, ok := hex_char_map[input[i]]
 		if !ok {
 			return output, errors.New(fmt.Sprintf("invalid character detected at offset %d in %s", i, input))
 		}
 		if i+1 < len(input) {
-			byteval1, ok := char_map[input[i+1]]
+			byteval1, ok := hex_char_map[input[i+1]]
 			if !ok {
 				return output, errors.New(fmt.Sprintf("invalid character detected at offset %d in %s", i+1, input))
 			}
