@@ -35,7 +35,7 @@ func Byte2Hex(input []byte) string {
 	// Each byte becomes a pair of runes
 	output := make([]byte, 0, len(input)*2)
 	for _, val := range input {
-		output = append(output, []byte(fmt.Sprintf("%x", val))...)
+		output = append(output, []byte(fmt.Sprintf("%.2x", val))...)
 	}
 	return string(output)
 }
