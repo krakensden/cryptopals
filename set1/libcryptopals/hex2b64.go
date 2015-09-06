@@ -31,6 +31,16 @@ var hex_char_map map[byte]byte = map[byte]byte{
 	'F': 15,
 }
 
+var Base64Alphabet string = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"
+var base64_char_map map[byte]byte = map[byte]byte{}
+
+func init() {
+	for i, v := range Base64Alphabet {
+		base64_char_map[byte(v)] = byte(i)
+	}
+	base64_char_map['='] = 0
+}
+
 func Byte2Hex(input []byte) string {
 	// Each byte becomes a pair of runes
 	output := make([]byte, 0, len(input)*2)
@@ -63,8 +73,6 @@ func Hex2Byte(input string) ([]byte, error) {
 }
 
 func Byte2Base64(input []byte) (output string) {
-	alphabet := "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"
-
 	var max_length int = len(input)
 	if len(input)%3 != 0 {
 		max_length += 3 - len(input)%3
@@ -88,12 +96,12 @@ func Byte2Base64(input []byte) (output string) {
 
 		switch i % 3 {
 		case 0:
-			output_builder = append(output_builder, alphabet[(cur&sixmask)>>2])
+			output_builder = append(output_builder, Base64Alphabet[(cur&sixmask)>>2])
 			remainder = cur &^ sixmask
 		case 1:
 			var top byte = (remainder << 4)
 			var bot byte = ((cur & topfourmask) >> 4)
-			output_builder = append(output_builder, alphabet[top|bot])
+			output_builder = append(output_builder, Base64Alphabet[top|bot])
 			remainder = cur & bottomfourmask
 		case 2:
 			if i >= len(input) {
@@ -102,18 +110,65 @@ func Byte2Base64(input []byte) (output string) {
 				var top1 byte = (remainder << 2)
 				var bot1 byte = ((cur & twomask) >> 6)
 
-				output_builder = append(output_builder, alphabet[top1|bot1])
+				output_builder = append(output_builder, Base64Alphabet[top1|bot1])
 			}
 			remainder = 0
 
 			if i > len(input) {
 				output_builder = append(output_builder, '=')
 			} else {
-				output_builder = append(output_builder, alphabet[cur&^twomask])
+				output_builder = append(output_builder, Base64Alphabet[cur&^twomask])
 			}
 		}
 	}
 	return string(output_builder)
+}
+
+func Base642Byte(input []byte) (output []byte, err error) {
+	// Each base64 character encodes 6 bits, each byte encodes 8 bits, so
+	// for each 4 b64 characters there are 3 bytes
+	var max_length int = len(input)
+	if len(input)%4 != 0 {
+		max_length += 4 + len(input)%4
+	}
+	var output_builder []byte = make([]byte, 0, max_length)
+	var toptwomask byte = 192 //    0b11000000
+
+	var cur, rem byte = 0, 0
+
+	// three bytes, four base64 characters
+	for i := 0; i < max_length; i++ {
+		if i >= len(input) {
+			cur = 0
+		} else {
+			if val, ok := base64_char_map[input[i]]; ok {
+				cur = val
+			} else {
+				return nil, errors.New(fmt.Sprintf("input contains %s, which is not a valid Base64 character", input[i]))
+			}
+		}
+
+		switch i % 4 {
+		// T
+		case 0:
+			rem = cur << 2
+		// W
+		case 1:
+			output_builder = append(output_builder, rem|(cur&toptwomask)>>6)
+			// Save the bottom half in the top half
+			rem = cur << 4
+		// F
+		case 2:
+			// bottom four bits of W and top four bits of F
+			output_builder = append(output_builder, (rem)|(cur>>2))
+			rem = (cur & 3) << 6
+		// u
+		case 3:
+			output_builder = append(output_builder, (rem)|(cur))
+			rem = 0 // not strictly necessary
+		}
+	}
+	return output_builder, nil
 }
 
 func Hex2Base64(input string) (output string, err error) {
