@@ -1,8 +1,8 @@
 package main
 
 import (
-	"../challenge3/xordecode"
 	"bufio"
+	"libcryptopals"
 	"fmt"
 	"io"
 	"os"
@@ -44,7 +44,7 @@ func DecodeFile(filename string) *AnalysisResult {
 			continue
 		}
 		go func(tstring string) {
-			decoded, score, err := xordecode.SingleBitBruteForce(tstring)
+			decoded, score, err := libcryptopals.SingleBitBruteForce(tstring)
 			result := &AnalysisResult{Decoded: &decoded, Score: score, Error: err, Original: &tstring}
 			results <- result
 		}(string(buf))

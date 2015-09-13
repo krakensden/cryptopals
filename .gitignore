@@ -1,3 +1,6 @@
 
 # Ignore binaries
-set?/challenge?/challenge?
+src/set?/challenge?/challenge?
+
+bin/
+pkg/

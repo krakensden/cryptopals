@@ -143,10 +143,12 @@ func Base642Byte(input []byte) (output []byte, err error) {
 		} else {
 			if val, ok := base64_char_map[input[i]]; ok {
 				cur = val
+				fmt.Println("input ", input[i], " b64 val ", cur)
 			} else {
 				return nil, errors.New(fmt.Sprintf("input contains %s, which is not a valid Base64 character", input[i]))
 			}
 		}
+		fmt.Println("i is ", i, " rem is ", rem, " output_builder ", output_builder)
 
 		switch i % 4 {
 		// T
@@ -154,16 +156,19 @@ func Base642Byte(input []byte) (output []byte, err error) {
 			rem = cur << 2
 		// W
 		case 1:
+			fmt.Println("appending ", rem|(cur&toptwomask)>>6)
 			output_builder = append(output_builder, rem|(cur&toptwomask)>>6)
 			// Save the bottom half in the top half
 			rem = cur << 4
 		// F
 		case 2:
+			fmt.Println("appending ", (rem)|(cur>>2))
 			// bottom four bits of W and top four bits of F
 			output_builder = append(output_builder, (rem)|(cur>>2))
 			rem = (cur & 3) << 6
 		// u
 		case 3:
+			fmt.Println("appending ", (rem)|(cur))
 			output_builder = append(output_builder, (rem)|(cur))
 			rem = 0 // not strictly necessary
 		}

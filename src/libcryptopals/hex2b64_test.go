@@ -1,6 +1,7 @@
 package libcryptopals
 
 import (
+	"fmt"
 	"testing"
 )
 
@@ -67,16 +68,17 @@ func TestBase642Byte(t *testing.T) {
 		"ICAgIA==": []byte{0x2, 0x0, 0x2, 0x0, 0x2, 0x0, 0x2, 0x0},
 	}
 	for input, output := range valid_inputs {
+		fmt.Println(input, output)
 		result, err := Base642Byte([]byte(input))
 		if err != nil {
-			t.Errorf("Did not expect an error (%s) for %q", err.Error(), input)
+			t.Errorf("Did not expect an error (%s) for %v", err.Error(), input)
 		}
 		if len(result) != len(output) {
-			t.Errorf("Result (%q) length is %d, which doesn't match the expected %q with length %d", result, len(result), output, len(output))
+			t.Errorf("Result (%v) length is %d, which doesn't match the expected %v with length %d", result, len(result), output, len(output))
 		}
 		for i := range output {
 			if result[i] != output[i] {
-				t.Errorf("Expected %q, got %q", output, result)
+				t.Errorf("Expected %v, got %v", output, result)
 			}
 		}
 	}
