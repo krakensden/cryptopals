@@ -68,8 +68,6 @@ func Hex2Byte(input string) ([]byte, error) {
 		} else {
 			output = append(output, byteval0)
 		}
-		// Resize so we don't pollute later tests
-		output = output[:0]
 	}
 	return output, nil
 }
