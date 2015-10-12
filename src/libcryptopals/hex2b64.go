@@ -68,6 +68,8 @@ func Hex2Byte(input string) ([]byte, error) {
 		} else {
 			output = append(output, byteval0)
 		}
+		// Resize so we don't pollute later tests
+		output = output[:0]
 	}
 	return output, nil
 }
@@ -124,7 +126,7 @@ func Byte2Base64(input []byte) (output string) {
 	return string(output_builder)
 }
 
-func Base642Byte(input []byte) (output []byte, err error) {
+func Base642Byte(input []byte) ([]byte, error) {
 	// Each base64 character encodes 6 bits, each byte encodes 8 bits, so
 	// for each 4 b64 characters there are 3 bytes
 	var max_length int = len(input)
@@ -132,7 +134,7 @@ func Base642Byte(input []byte) (output []byte, err error) {
 		max_length += 4 + len(input)%4
 	}
 	var output_builder []byte = make([]byte, 0, max_length)
-	var toptwomask byte = 192 //    0b11000000
+	var toptwomask byte = 48
 
 	var cur, rem byte = 0, 0
 
@@ -143,33 +145,31 @@ func Base642Byte(input []byte) (output []byte, err error) {
 		} else {
 			if val, ok := base64_char_map[input[i]]; ok {
 				cur = val
-				fmt.Println("input ", input[i], " b64 val ", cur)
 			} else {
 				return nil, errors.New(fmt.Sprintf("input contains %s, which is not a valid Base64 character", input[i]))
 			}
 		}
-		fmt.Println("i is ", i, " rem is ", rem, " output_builder ", output_builder)
 
 		switch i % 4 {
-		// T
 		case 0:
 			rem = cur << 2
-		// W
 		case 1:
-			fmt.Println("appending ", rem|(cur&toptwomask)>>6)
-			output_builder = append(output_builder, rem|(cur&toptwomask)>>6)
+			output_builder = append(output_builder, rem|(cur&toptwomask>>4))
 			// Save the bottom half in the top half
 			rem = cur << 4
-		// F
 		case 2:
-			fmt.Println("appending ", (rem)|(cur>>2))
 			// bottom four bits of W and top four bits of F
-			output_builder = append(output_builder, (rem)|(cur>>2))
+			next := (rem) | (cur >> 2)
+			if !(next == 0 && input[i] == '=') {
+				output_builder = append(output_builder, next)
+			}
 			rem = (cur & 3) << 6
 		// u
 		case 3:
-			fmt.Println("appending ", (rem)|(cur))
-			output_builder = append(output_builder, (rem)|(cur))
+			next := (rem) | (cur)
+			if !(next == 0 && input[i] == '=') {
+				output_builder = append(output_builder, next)
+			}
 			rem = 0 // not strictly necessary
 		}
 	}
