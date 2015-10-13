@@ -49,6 +49,14 @@ func normalizedDistance(chunk_size int, chunks_to_test int, text []byte) (int, e
 	return normalized_distance / chunks_to_test, nil
 }
 
+func transposeBlocks(input []byte, chunk_size int) [][]byte {
+	var output [][]byte = make([][]byte, chunk_size)
+	for index, val := range input {
+		output[index%chunk_size] = append(output[index%chunk_size], val)
+	}
+	return output
+}
+
 func main() {
 	input, err := SlurpB64EncodedFile("src/set1/challenge6/6.txt")
 	if err != nil {
@@ -70,4 +78,14 @@ func main() {
 		}
 	}
 	fmt.Println("Choosing ", min_size, " as the most promising key size")
+
+	transposed_blocks := transposeBlocks(input, min_size)
+	key_guesses := make([]byte, min_size)
+
+	for i, block := range transposed_blocks {
+		most_likely, _ := libcryptopals.SimpleSingleBitBruteForce(block)
+		key_guesses[i] = most_likely
+	}
+	fmt.Println(key_guesses)
+	fmt.Println(string(key_guesses))
 }

@@ -67,3 +67,19 @@ func SingleBitBruteForce(input string) (string, int, error) {
 	}
 	return string(ByteXor(src, most_likely)), most_likely_score, err
 }
+
+func SimpleSingleBitBruteForce(src []byte) (byte, int) {
+	char_map := make(map[byte]int)
+	var most_likely byte
+	var most_likely_score int
+
+	for i := byte(0x0); i < 0xff; i++ {
+		translated := ByteXor(src, i)
+		char_map[i] = EScore(translated)
+		if char_map[i] > most_likely_score {
+			most_likely = i
+			most_likely_score = char_map[i]
+		}
+	}
+	return most_likely, most_likely_score
+}
