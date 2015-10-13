@@ -88,4 +88,6 @@ func main() {
 	}
 	fmt.Println(key_guesses)
 	fmt.Println(string(key_guesses))
+	output, err := libcryptopals.SliceRepeatingXor(input, key_guesses)
+	fmt.Println(string(output))
 }
