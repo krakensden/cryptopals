@@ -44,17 +44,10 @@ func normalizedDistance(chunk_size int, chunks_to_test int, text []byte) (int, e
 		if err != nil {
 			return 0, err
 		}
+		fmt.Println(distance, text[starting:starting+chunk_size], text[starting+chunk_size:starting+chunk_size*2])
 		normalized_distance = normalized_distance + distance/chunk_size
 	}
 	return normalized_distance / chunks_to_test, nil
-}
-
-func transposeBlocks(input []byte, chunk_size int) [][]byte {
-	var output [][]byte = make([][]byte, chunk_size)
-	for index, val := range input {
-		output[index%chunk_size] = append(output[index%chunk_size], val)
-	}
-	return output
 }
 
 func main() {
@@ -79,7 +72,7 @@ func main() {
 	}
 	fmt.Println("Choosing ", min_size, " as the most promising key size")
 
-	transposed_blocks := transposeBlocks(input, min_size)
+	transposed_blocks := libcryptopals.TransposeBlocks(input, min_size)
 	key_guesses := make([]byte, min_size)
 
 	for i, block := range transposed_blocks {
