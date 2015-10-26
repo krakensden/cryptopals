@@ -36,20 +36,6 @@ func SlurpB64EncodedFile(filename string) ([]byte, error) {
 	return libcryptopals.Base642Byte(wholebuf)
 }
 
-func normalizedDistance(chunk_size int, chunks_to_test int, text []byte) (int, error) {
-	var normalized_distance int = 0
-	for index := 0; index < chunks_to_test; index++ {
-		starting := chunk_size * index
-		distance, err := libcryptopals.HammingDistance(text[starting:starting+chunk_size], text[starting+chunk_size:starting+chunk_size*2])
-		if err != nil {
-			return 0, err
-		}
-		fmt.Println(distance, text[starting:starting+chunk_size], text[starting+chunk_size:starting+chunk_size*2])
-		normalized_distance = normalized_distance + distance/chunk_size
-	}
-	return normalized_distance / chunks_to_test, nil
-}
-
 func main() {
 	input, err := SlurpB64EncodedFile("src/set1/challenge6/6.txt")
 	if err != nil {
@@ -60,7 +46,7 @@ func main() {
 	// like 'look at more than the first two blocks' instead
 	min_distance, min_size := 41, 0
 	for KEYSIZE := 2; KEYSIZE < 41; KEYSIZE++ {
-		single_distance, err := normalizedDistance(KEYSIZE, 1, input)
+		single_distance, err := libcryptopals.NormalizedDistance(KEYSIZE, 1, input)
 		if single_distance < min_distance {
 			min_size = KEYSIZE
 			min_distance = single_distance
