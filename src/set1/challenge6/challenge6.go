@@ -65,8 +65,10 @@ func main() {
 		most_likely, _ := libcryptopals.SimpleSingleBitBruteForce(block)
 		key_guesses[i] = most_likely
 	}
+
 	fmt.Println(key_guesses)
-	fmt.Println(string(key_guesses))
+	fmt.Println("Key Guesses ", string(key_guesses))
+
 	output, err := libcryptopals.SliceRepeatingXor(input, key_guesses)
 	fmt.Println(string(output))
 }

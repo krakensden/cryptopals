@@ -2,9 +2,9 @@ package main
 
 import (
 	"bufio"
-	"libcryptopals"
 	"fmt"
 	"io"
+	"libcryptopals"
 	"os"
 )
 
@@ -65,7 +65,7 @@ func DecodeFile(filename string) *AnalysisResult {
 }
 
 func main() {
-	best_result := DecodeFile("input.txt")
+	best_result := DecodeFile("src/set1/challenge4/input.txt")
 	if best_result != nil {
 		fmt.Println("The single-byte XOR encoded string is", *(best_result.Decoded), "from", *(best_result.Original), "with a score of", best_result.Score)
 	} else {
