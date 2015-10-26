@@ -101,7 +101,7 @@ func SimpleSingleBitBruteForce(src []byte) (byte, int) {
 	var most_likely byte
 	var most_likely_score int
 
-	for i := byte(0x0); i < 0xff; i++ {
+	for _, i := range valid_chars {
 		translated := ByteXor(src, i)
 		char_map[i] = EScore(translated)
 		if char_map[i] > most_likely_score {

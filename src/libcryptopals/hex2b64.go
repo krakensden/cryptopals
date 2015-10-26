@@ -33,12 +33,16 @@ var hex_char_map map[byte]byte = map[byte]byte{
 
 var Base64Alphabet string = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"
 var base64_char_map map[byte]byte = map[byte]byte{}
+var valid_chars []byte = []byte{'\n', '\r', '\t'}
 
 func init() {
 	for i, v := range Base64Alphabet {
 		base64_char_map[byte(v)] = byte(i)
 	}
 	base64_char_map['='] = 0
+	for printable := byte(0x20); printable < 0x7F; printable++ {
+		valid_chars = append(valid_chars, printable)
+	}
 }
 
 func Byte2Hex(input []byte) string {
