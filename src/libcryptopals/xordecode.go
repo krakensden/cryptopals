@@ -31,41 +31,6 @@ func ReadList(path string) ([]string, error) {
 func EScore(input []byte) int {
 	var count int = 0
 
-	// Reward common three letter words
-	if word_list == nil {
-		var err error
-		word_list, err = ReadList("/usr/share/dict/words")
-		if err != nil {
-			// static top word list
-			word_list = []string{
-				"the",
-				"be",
-				"to",
-				"of",
-				"and",
-				"a",
-				"in",
-				"that",
-				"have",
-				"I",
-				"it",
-				"for",
-				"not",
-				"on",
-				"with",
-				"he",
-				"as",
-				"you",
-				"do",
-				"at",
-				"this",
-				"but",
-				"his",
-				"by",
-				"from",
-			}
-		}
-	}
 	vowel_map := map[byte]int{
 		'A': 8,
 		'a': 8,
@@ -129,7 +94,7 @@ func EScore(input []byte) int {
 		')': -1,
 		';': -1,
 	}
-	for index, val := range input {
+	for _, val := range input {
 		if score, ok := vowel_map[val]; ok {
 			count += score
 		} else {
@@ -144,19 +109,6 @@ func EScore(input []byte) int {
 			}
 			if !found {
 				count -= 5
-			}
-		}
-		// word scoring
-		for _, word := range word_list {
-			if index+len(word) < len(input) {
-				for i := 0; i < len(word); i++ {
-					if input[index+i] != word[i] {
-						break
-					}
-					if i == len(word)-1 && len(word) > 1 { // we didn't bail out, and we've compared all characters
-						count += 150
-					}
-				}
 			}
 		}
 	}
