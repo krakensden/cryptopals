@@ -9,7 +9,7 @@ func DecodeXorEncodedBlock(input []byte) {
 
 	transposed_blocks := TransposeBlocks(input, min_size)
 
-	for KEYSIZE := 2; KEYSIZE < 41; KEYSIZE++ {
+	for KEYSIZE := 1; KEYSIZE < 41; KEYSIZE++ {
 		single_distance, err := NormalizedDistance(KEYSIZE, 1, input)
 
 		/// xxx delete
@@ -22,11 +22,11 @@ func DecodeXorEncodedBlock(input []byte) {
 			key_guesses[i] = most_likely
 		}
 
-		fmt.Println(key_guesses)
-		fmt.Println("Key Guesses ", string(key_guesses))
+		//fmt.Println(key_guesses)
+		//fmt.Println("Key Guesses ", string(key_guesses))
 
-		output, err := SliceRepeatingXor(input, key_guesses)
-		fmt.Println(string(output))
+		//output, err := SliceRepeatingXor(input, key_guesses)
+		//fmt.Println(string(output))
 		/// xxx delete
 
 		if single_distance < min_distance {

@@ -1,6 +1,6 @@
 package libcryptopals
 
-import "fmt"
+//import "fmt"
 
 // 'score' something as looking like english. Values from http://norvig.com/mayzner.html
 func EScore(input []byte) int {
@@ -120,7 +120,7 @@ func SimpleSingleBitBruteForce(src []byte) (byte, int) {
 		translated := ByteXor(src, i)
 		char_map[i] = EScore(translated)
 		if char_map[i] > most_likely_score {
-			fmt.Printf("Most likely transition %x(%c)->%x(%c) @ score %d\n", most_likely, most_likely, i, i, char_map[i])
+			//fmt.Printf("Most likely transition %x(%c)->%x(%c) @ score %d\n", most_likely, most_likely, i, i, char_map[i])
 			most_likely = i
 			most_likely_score = char_map[i]
 		}
