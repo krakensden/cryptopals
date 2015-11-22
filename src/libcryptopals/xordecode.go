@@ -5,6 +5,17 @@ package libcryptopals
 // 'score' something as looking like english. Values from http://norvig.com/mayzner.html
 func EScore(input []byte) int {
 	var count int = 0
+
+	// Reward common three letter words
+	tla_map := map[string]int{
+		"the":  150,
+		"and":  150,
+		" if":  150,
+		"if ":  150,
+		"are":  150,
+		"can":  150,
+		"will": 150,
+	}
 	vowel_map := map[byte]int{
 		'A': 8,
 		'a': 8,
@@ -68,7 +79,7 @@ func EScore(input []byte) int {
 		')': -1,
 		';': -1,
 	}
-	for _, val := range input {
+	for index, val := range input {
 		if score, ok := vowel_map[val]; ok {
 			count += score
 		} else {
@@ -83,6 +94,19 @@ func EScore(input []byte) int {
 			}
 			if !found {
 				count -= 5
+			}
+		}
+		// tla scoring
+		if index+3 < len(input) {
+			for tla := range tla_map {
+				for i := 0; i < 3; i++ {
+					if input[index+i] != tla[i] {
+						break
+					}
+					if i == 2 { // we didn't bail out, and we've compared all characters
+						count += tla_map[tla]
+					}
+				}
 			}
 		}
 	}
