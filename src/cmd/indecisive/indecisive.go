@@ -1,6 +1,6 @@
 package main
 
-import "../libcryptopals"
+import "libcryptopals"
 import "fmt"
 import "flag"
 
@@ -9,7 +9,7 @@ import "flag"
 
 func main() {
 	var key *string = flag.String("key", "foo", "key to encrypt with")
-	var text *string = flag.String("text", "bar", "text to encipher")
+	var text *string = flag.String("text", "barbazbang", "text to encipher")
 	var score *bool = flag.Bool("score", false, "just print out score of text block")
 	flag.Parse()
 
@@ -29,5 +29,6 @@ func main() {
 		fmt.Println(err)
 		return
 	}
+	fmt.Printf("Base64 encrypted text:\n%s\n", libcryptopals.Byte2Base64(outbytes))
 	libcryptopals.DecodeXorEncodedBlock(outbytes)
 }
