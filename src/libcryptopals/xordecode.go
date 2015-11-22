@@ -1,7 +1,31 @@
 package libcryptopals
 
-//import "fmt"
+import (
+	"bufio"
+	"os"
+)
+
 var word_list []string
+
+func ReadList(path string) ([]string, error) {
+	f, err := os.Open(path)
+	if err != nil {
+		return nil, err
+	}
+	defer f.Close()
+
+	rval := make([]string, 0, 4096)
+
+	scanner := bufio.NewScanner(f)
+	for scanner.Scan() {
+		rval = append(rval, scanner.Text())
+	}
+
+	if err = scanner.Err(); err != nil {
+		return nil, err
+	}
+	return rval, nil
+}
 
 // 'score' something as looking like english. Values from http://norvig.com/mayzner.html
 func EScore(input []byte) int {
@@ -9,14 +33,37 @@ func EScore(input []byte) int {
 
 	// Reward common three letter words
 	if word_list == nil {
-		word_list = []string{
-			"the",
-			"and",
-			" if",
-			"if ",
-			"are",
-			"can",
-			"will",
+		var err error
+		word_list, err = ReadList("/usr/share/dict/words")
+		if err != nil {
+			// static top word list
+			word_list = []string{
+				"the",
+				"be",
+				"to",
+				"of",
+				"and",
+				"a",
+				"in",
+				"that",
+				"have",
+				"I",
+				"it",
+				"for",
+				"not",
+				"on",
+				"with",
+				"he",
+				"as",
+				"you",
+				"do",
+				"at",
+				"this",
+				"but",
+				"his",
+				"by",
+				"from",
+			}
 		}
 	}
 	vowel_map := map[byte]int{
@@ -106,7 +153,7 @@ func EScore(input []byte) int {
 					if input[index+i] != word[i] {
 						break
 					}
-					if i == len(word)-1 { // we didn't bail out, and we've compared all characters
+					if i == len(word)-1 && len(word) > 1 { // we didn't bail out, and we've compared all characters
 						count += 150
 					}
 				}
