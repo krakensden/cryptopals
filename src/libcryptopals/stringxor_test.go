@@ -15,4 +15,19 @@ func TestStringRepeatingXor(t *testing.T) {
 	if output != success {
 		t.Errorf("Decoded the string wrong")
 	}
+	output_parsed, err := Hex2Byte(output)
+	if err != nil {
+		t.Error(err)
+	}
+	output2, err := SliceRepeatingXor(output_parsed, []byte("ICE"))
+	if len(output2) != len(demo) {
+		t.Errorf("Can't reverse Xor- got %s => %s", demo, output2)
+		return
+	}
+	for index, _ := range output2 {
+		if demo[index] != output2[index] {
+			t.Errorf("Strings don't match- first character @ %d (%q vs %q)\n%s\n\tvs\n%s", index, demo[index], output2[index], demo, output2)
+			return
+		}
+	}
 }
