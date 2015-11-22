@@ -59,6 +59,14 @@ func EScore(input []byte) int {
 		'x': 0,
 		'Z': 0,
 		'z': 0,
+		'`': -1,
+		'[': -1,
+		']': -1,
+		'<': -1,
+		'>': -1,
+		'(': -1,
+		')': -1,
+		';': -1,
 	}
 	for _, val := range input {
 		if score, ok := vowel_map[val]; ok {
