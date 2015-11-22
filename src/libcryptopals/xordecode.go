@@ -1,20 +1,23 @@
 package libcryptopals
 
 //import "fmt"
+var word_list []string
 
 // 'score' something as looking like english. Values from http://norvig.com/mayzner.html
 func EScore(input []byte) int {
 	var count int = 0
 
 	// Reward common three letter words
-	tla_map := map[string]int{
-		"the":  150,
-		"and":  150,
-		" if":  150,
-		"if ":  150,
-		"are":  150,
-		"can":  150,
-		"will": 150,
+	if word_list == nil {
+		word_list = []string{
+			"the",
+			"and",
+			" if",
+			"if ",
+			"are",
+			"can",
+			"will",
+		}
 	}
 	vowel_map := map[byte]int{
 		'A': 8,
@@ -96,15 +99,15 @@ func EScore(input []byte) int {
 				count -= 5
 			}
 		}
-		// tla scoring
-		if index+3 < len(input) {
-			for tla := range tla_map {
-				for i := 0; i < 3; i++ {
-					if input[index+i] != tla[i] {
+		// word scoring
+		for _, word := range word_list {
+			if index+len(word) < len(input) {
+				for i := 0; i < len(word); i++ {
+					if input[index+i] != word[i] {
 						break
 					}
-					if i == 2 { // we didn't bail out, and we've compared all characters
-						count += tla_map[tla]
+					if i == len(word)-1 { // we didn't bail out, and we've compared all characters
+						count += 150
 					}
 				}
 			}
