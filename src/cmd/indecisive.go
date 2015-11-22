@@ -19,13 +19,15 @@ func main() {
 	}
 	fmt.Println(*key)
 	fmt.Println(*text)
-	out, err := libcryptopals.StringRepeatingXor(*text, *key)
+	outhex, err := libcryptopals.StringRepeatingXor(*text, *key)
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
-	fmt.Println(out)
-
-	var input []byte = []byte(out)
-	libcryptopals.DecodeXorEncodedBlock(input)
+	outbytes, err := libcryptopals.Hex2Byte(outhex)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	libcryptopals.DecodeXorEncodedBlock(outbytes)
 }
