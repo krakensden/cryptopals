@@ -97,22 +97,9 @@ func EScore(input []byte) int {
 	for _, val := range input {
 		if score, ok := vowel_map[val]; ok {
 			count += score
-		} else {
-			// Make invalid characters have a negative value.
-			// super inefficient, but maybe I don't care (?)
-			found := false
-			for _, valid := range valid_chars {
-				if val == valid {
-					found = true
-					break
-				}
-			}
-			if !found {
-				count -= 5
-			}
 		}
 	}
-	return count
+	return count - (UnPrintableScore(input) * 100)
 }
 
 func UnPrintableScore(input []byte) int {
