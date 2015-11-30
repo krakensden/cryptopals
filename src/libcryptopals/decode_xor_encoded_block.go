@@ -27,7 +27,8 @@ func DecodeXorEncodedBlock(input []byte) {
 	key_guesses := make([]byte, min_size)
 
 	for i, block := range transposed_blocks {
-		most_likely, _ := SimpleSingleBitBruteForce(block)
+		most_likely, most_likely_score := SimpleSingleBitBruteForce(block)
+		fmt.Println("most_likely ", most_likely, " score ", most_likely_score)
 		key_guesses[i] = most_likely
 	}
 
@@ -36,7 +37,8 @@ func DecodeXorEncodedBlock(input []byte) {
 
 	output, err := SliceRepeatingXor(input, key_guesses)
 	if err != nil {
-		fmt.Println(err)
+		fmt.Println("slicerepeatingxor ", err)
+		return
 	}
 	fmt.Println(string(output))
 }

@@ -19,7 +19,7 @@ func XorFinderDecodeFile(filename string) *XorFinderAnalysisResult {
 
 	f, err := os.Open(filename)
 	if err != nil {
-		fmt.Println(err)
+		fmt.Println("failed to open ", filename, " got ", err)
 		return nil
 	}
 	defer func() {
