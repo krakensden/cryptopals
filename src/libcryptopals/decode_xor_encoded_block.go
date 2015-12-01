@@ -2,7 +2,7 @@ package libcryptopals
 
 import "fmt"
 
-func DecodeXorEncodedBlock(input []byte) {
+func DecodeXorEncodedBlock(input []byte) []byte {
 	// Dumbest possible guess. Presumably will need to do something 'sophisticated'
 	// like 'look at more than the first two blocks' instead
 	min_distance, min_size := 41, 1
@@ -38,7 +38,7 @@ func DecodeXorEncodedBlock(input []byte) {
 	output, err := SliceRepeatingXor(input, key_guesses)
 	if err != nil {
 		fmt.Println("slicerepeatingxor ", err)
-		return
+		return nil
 	}
-	fmt.Println(string(output))
+	return output
 }

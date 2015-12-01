@@ -30,5 +30,5 @@ func main() {
 		return
 	}
 	fmt.Printf("Base64 encrypted text:\n%s\n", libcryptopals.Byte2Base64(outbytes))
-	libcryptopals.DecodeXorEncodedBlock(outbytes)
+	fmt.Println(libcryptopals.DecodeXorEncodedBlock(outbytes))
 }

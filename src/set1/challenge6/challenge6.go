@@ -46,5 +46,5 @@ func main() {
 		panic(err)
 	}
 
-	libcryptopals.DecodeXorEncodedBlock(input)
+	fmt.Println(libcryptopals.DecodeXorEncodedBlock(input))
 }
