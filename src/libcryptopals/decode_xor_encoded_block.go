@@ -20,7 +20,7 @@ func GuessKeySize(input []byte) int {
 		}
 	}
 	fmt.Println("Choosing ", min_size, " as the most promising key size")
-	return min_distance
+	return min_size
 }
 
 func DecodeXorEncodedBlock(input []byte) []byte {
