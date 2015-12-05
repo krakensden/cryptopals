@@ -7,8 +7,6 @@ func DecodeXorEncodedBlock(input []byte) []byte {
 	// like 'look at more than the first two blocks' instead
 	min_distance, min_size := 41, 1
 
-	transposed_blocks := TransposeBlocks(input, min_size)
-
 	for KEYSIZE := 1; KEYSIZE < 41; KEYSIZE++ {
 		single_distance, err := NormalizedDistance(KEYSIZE, 1, input)
 
@@ -23,7 +21,7 @@ func DecodeXorEncodedBlock(input []byte) []byte {
 	}
 	fmt.Println("Choosing ", min_size, " as the most promising key size")
 
-	transposed_blocks = TransposeBlocks(input, min_size)
+	transposed_blocks := TransposeBlocks(input, min_size)
 	key_guesses := make([]byte, min_size)
 
 	for i, block := range transposed_blocks {
