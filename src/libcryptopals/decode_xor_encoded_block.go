@@ -2,7 +2,7 @@ package libcryptopals
 
 import "fmt"
 
-func GuessKeySize(input []byte) int {
+func DecodeXorEncodedBlock(input []byte) []byte {
 	// Dumbest possible guess. Presumably will need to do something 'sophisticated'
 	// like 'look at more than the first two blocks' instead
 	min_distance, min_size := 41, 1
@@ -20,11 +20,7 @@ func GuessKeySize(input []byte) int {
 		}
 	}
 	fmt.Println("Choosing ", min_size, " as the most promising key size")
-	return min_distance
-}
 
-func DecodeXorEncodedBlock(input []byte) []byte {
-	min_size := GuessKeySize(input)
 	transposed_blocks := TransposeBlocks(input, min_size)
 	key_guesses := make([]byte, min_size)
 
