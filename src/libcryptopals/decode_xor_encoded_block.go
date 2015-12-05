@@ -27,8 +27,7 @@ func DecodeXorEncodedBlock(input []byte) []byte {
 	key_guesses := make([]byte, min_size)
 
 	for i, block := range transposed_blocks {
-		most_likely, most_likely_score := SimpleSingleBitBruteForce(block)
-		fmt.Println("most_likely ", most_likely, " score ", most_likely_score)
+		most_likely, _ := SimpleSingleBitBruteForce(block)
 		key_guesses[i] = most_likely
 	}
 

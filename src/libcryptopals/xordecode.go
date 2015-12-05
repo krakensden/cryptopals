@@ -147,14 +147,14 @@ func SingleBitBruteForce(input string) (string, int, error) {
 
 func SimpleSingleBitBruteForce(src []byte) (byte, int) {
 	char_map := make(map[byte]int)
-	var most_likely byte
-	var most_likely_score int
+	var most_likely byte = 0
+	var most_likely_score int = 0
 
-	for _, i := range valid_chars {
+	//for _, i := range valid_chars {
+	for i := byte(0); i < 255; i++ {
 		translated := ByteXor(src, i)
 		char_map[i] = EScore(translated)
 		if char_map[i] > most_likely_score {
-			//fmt.Printf("Most likely transition %x(%c)->%x(%c) @ score %d\n", most_likely, most_likely, i, i, char_map[i])
 			most_likely = i
 			most_likely_score = char_map[i]
 		}
