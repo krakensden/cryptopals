@@ -127,21 +127,12 @@ func UnPrintableScore(input []byte) int {
 
 func SingleBitBruteForce(input string) (string, int, error) {
 	src, err := Hex2Byte(input)
-	char_map := make(map[byte]int)
 	if err != nil {
 		return "", 0, err
 	}
-	var most_likely byte
-	var most_likely_score int
 
-	for i := byte(0x0); i < 0xff; i++ {
-		translated := ByteXor(src, i)
-		char_map[i] = EScore(translated)
-		if char_map[i] > most_likely_score {
-			most_likely = i
-			most_likely_score = char_map[i]
-		}
-	}
+	most_likely, most_likely_score := SimpleSingleBitBruteForce(src)
+
 	return string(ByteXor(src, most_likely)), most_likely_score, err
 }
 
