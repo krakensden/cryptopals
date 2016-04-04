@@ -5,10 +5,20 @@ import "fmt"
 func GuessKeySize(input []byte) int {
 	// Dumbest possible guess. Presumably will need to do something 'sophisticated'
 	// like 'look at more than the first two blocks' instead
-	min_distance, min_size := 41, 1
+	min_distance := 41.0
+	min_size := 1
 
 	for KEYSIZE := 1; KEYSIZE < 41; KEYSIZE++ {
-		single_distance, err := NormalizedDistance(KEYSIZE, 1, input)
+		if KEYSIZE*2 > len(input) {
+			break
+		}
+
+		//single_distance, err := HammingDistance(input[0:KEYSIZE], input[KEYSIZE:KEYSIZE*2])
+		//single_distance = single_distance / KEYSIZE
+		single_distance, err := AverageNormalizedDistance(KEYSIZE, len(input)/KEYSIZE-1, input)
+		if err != nil {
+			panic(err)
+		}
 
 		if single_distance < min_distance {
 			min_size = KEYSIZE
